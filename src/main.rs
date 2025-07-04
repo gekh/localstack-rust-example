@@ -8,6 +8,10 @@ async fn main() -> Result<(), lambda_runtime::Error> {
     Ok(())
 }
 
-async fn handler(_: LambdaEvent<Value>) -> Result<Value, lambda_runtime::Error> {
-    Ok(json!({"statusCode": 200, "body": "OK"}))
+async fn handler(event: LambdaEvent<Value>) -> Result<Value, lambda_runtime::Error> {
+    println!("Received event: {:?}", event);
+    Ok(json!({
+        "statusCode": 200,
+        "body": "Hello from Rust Lambda"
+    }))
 }
