@@ -61,6 +61,17 @@ awslocal lambda get-function \
   --function-name localstack-rust-example
 ```
 
+You should see this when lambda is created/updated successfully:
+
+```json
+{
+  // ...
+  "State": "Active",
+  "LastUpdateStatus": "Successful"
+  // ...
+}
+```
+
 ## UPDATE
 
 ```
