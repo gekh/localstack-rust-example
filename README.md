@@ -1,6 +1,6 @@
 # README
 
-It's a dummy lambda function in rust to run on localstack on macos.
+This project provides a minimal example of an AWS Lambda function written in Rust, designed to run locally using Localstack on macOS.
 
 ## INSTALL
 
@@ -40,11 +40,11 @@ It's a dummy lambda function in rust to run on localstack on macos.
 ```sh
 rustup target add x86_64-unknown-linux-musl
 cargo build --release --target x86_64-unknown-linux-musl
-cp target/x86_64-unknown-linux-musl/release/dummy bootstrap
+cp target/x86_64-unknown-linux-musl/release/localstack-rust-example bootstrap
 chmod +x bootstrap
 zip lambda.zip bootstrap
 aws --endpoint-url=http://localhost:4566 lambda create-function \
-  --function-name lambda-dummy-test \
+  --function-name localstack-rust-example \
   --runtime provided.al2 \
   --role arn:aws:iam::000000000000:role/lambda-role \
   --handler bootstrap \
@@ -52,11 +52,13 @@ aws --endpoint-url=http://localhost:4566 lambda create-function \
 rm lambda.zip bootstrap response.json
 ```
 
+_(press "q" to exit status message when lambda is created)_
+
 ## CHECK
 
 ```sh
 awslocal lambda get-function \
-  --function-name lambda-dummy-test
+  --function-name localstack-rust-example
 ```
 
 ## UPDATE
@@ -64,24 +66,28 @@ awslocal lambda get-function \
 ```
 rm lambda.zip bootstrap response.json
 cargo build --release --target x86_64-unknown-linux-musl
-cp target/x86_64-unknown-linux-musl/release/dummy bootstrap
+cp target/x86_64-unknown-linux-musl/release/localstack-rust-example bootstrap
 chmod +x bootstrap
 zip lambda.zip bootstrap
 awslocal lambda update-function-code \
-  --function-name lambda-dummy-test \
+  --function-name localstack-rust-example \
   --zip-file fileb://lambda.zip
 rm lambda.zip bootstrap response.json
 ```
+
+_(press "q" to exit status message after lambda is updated)_
 
 ## TEST
 
 ```sh
 aws --endpoint-url=http://localhost:4566 lambda invoke \
-  --function-name lambda-dummy-test \
+  --function-name localstack-rust-example \
   --payload '{}' \
   --cli-binary-format raw-in-base64-out \
   response.json
 ```
+
+_(press "q" to exit status message after lambda is invoked)_
 
 Look at result
 
@@ -105,5 +111,5 @@ rm response.json
 
 ```
 awslocal lambda delete-function \
-  --function-name lambda-dummy-test
+  --function-name localstack-rust-example
 ```
