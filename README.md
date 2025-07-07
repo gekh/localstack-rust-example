@@ -43,7 +43,7 @@ rustup target add x86_64-unknown-linux-musl
 cargo build --release --target x86_64-unknown-linux-musl
 cp target/x86_64-unknown-linux-musl/release/localstack-rust-example bootstrap
 chmod +x bootstrap
-zip lambda.zip bootstrap
+zip -9 lambda.zip bootstrap
 awslocal lambda create-function \
   --function-name localstack-rust-example \
   --runtime provided.al2 \
@@ -89,7 +89,7 @@ rm lambda.zip bootstrap
 
 _(press "q" to exit status message after lambda is updated)_
 
-## TEST
+## INVOKE
 
 ```sh
 awslocal lambda invoke \
