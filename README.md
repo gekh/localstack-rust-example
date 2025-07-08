@@ -21,10 +21,11 @@ This project provides a minimal example of an AWS Lambda function written in Rus
   brew install awscli-local
   ```
 
-- Install compiler for x86_64-unknown-linux-musl
+- Install compiler for aarch64-unknown-linux-gnu
   https://rustup.rs/
   ```sh
-  rustup target add x86_64-unknown-linux-musl
+  brew tap messense/macos-cross-toolchains
+  brew install aarch64-unknown-linux-gnu
   brew install FiloSottile/musl-cross/musl-cross
   ```
 
@@ -39,14 +40,15 @@ This project provides a minimal example of an AWS Lambda function written in Rus
 ### CREATE
 
 ```sh
-rustup target add x86_64-unknown-linux-musl
-cargo build --release --target x86_64-unknown-linux-musl
-cp target/x86_64-unknown-linux-musl/release/localstack-rust-example bootstrap
+rustup target add aarch64-unknown-linux-gnu
+cargo build --release --target aarch64-unknown-linux-gnu
+cp target/aarch64-unknown-linux-gnu/release/localstack-rust-example bootstrap
 chmod +x bootstrap
 zip -9 lambda.zip bootstrap
 awslocal lambda create-function \
   --function-name localstack-rust-example \
-  --runtime provided.al2 \
+  --runtime provided.al2023 \
+  --architectures arm64 \
   --role arn:aws:iam::000000000000:role/lambda-role \
   --handler bootstrap \
   --zip-file fileb://lambda.zip
@@ -77,8 +79,8 @@ You should see this when lambda is created/updated successfully:
 
 ```
 rm lambda.zip bootstrap response.json
-cargo build --release --target x86_64-unknown-linux-musl
-cp target/x86_64-unknown-linux-musl/release/localstack-rust-example bootstrap
+cargo build --release --target aarch64-unknown-linux-gnu
+cp target/aarch64-unknown-linux-gnu/release/localstack-rust-example bootstrap
 chmod +x bootstrap
 zip lambda.zip bootstrap
 awslocal lambda update-function-code \
@@ -96,7 +98,13 @@ awslocal lambda invoke \
   --function-name localstack-rust-example \
   --payload '{}' \
   --cli-binary-format raw-in-base64-out \
-  response.json & cat response.json | jq
+  response.json
+```
+
+Print result:
+
+```sh
+cat response.json | jq
 ```
 
 _(install jq or remove "| jq" in the end to see raw response)_
