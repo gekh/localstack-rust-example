@@ -82,7 +82,7 @@ rm lambda.zip bootstrap response.json
 cargo build --release --target aarch64-unknown-linux-gnu
 cp target/aarch64-unknown-linux-gnu/release/localstack-rust-example bootstrap
 chmod +x bootstrap
-zip lambda.zip bootstrap
+zip -9 lambda.zip bootstrap
 awslocal lambda update-function-code \
   --function-name localstack-rust-example \
   --zip-file fileb://lambda.zip
